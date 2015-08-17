@@ -19,3 +19,23 @@ import "deps/phoenix_html/web/static/js/phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+
+let canvas = document.getElementById("canvas")
+let context = canvas.getContext("2d")
+
+let App = {
+  runTetris: function() {
+    let state = {
+      board: [],
+      next: "piece"
+    }
+    this.draw(context, state)
+  },
+  draw: function(context,state) {
+    console.log("loldraw")
+  }
+}
+
+App.runTetris();
+
+export default App
