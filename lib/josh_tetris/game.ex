@@ -1,11 +1,24 @@
 defmodule JoshTetris.Game do
+  use GenServer
+  alias JoshTetris.Shapes
+  alias JoshTetris.Game.State
 
-  defmodule State do
-    defstruct [:board, :next]
+  @game_tick 500
+
+  ## Public API
+  def start do
+    {:ok, pid} = GenServer.start(__MODULE__, [])
+    :timer.send_interval(@game_tick, pid, :tick)
+    {:ok, pid}
+  end
+
+  def get_state(pid) do
+    GenServer.call(pid, :get_state)
   end
   
-  def start do
-    {:ok, %Tetris.Game.State{
+  ## Server Callbacks
+  def init(_args) do
+    {:ok, %JoshTetris.Game.State{
       board: [
         [0,0,0,0,1,0,0,0,0,0],
         [0,0,0,0,1,0,0,0,0,0],
@@ -27,20 +40,40 @@ defmodule JoshTetris.Game do
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0]
       ],
-      next: [
-        [1, 0],
-        [1, 0],
-        [1, 1]
-      ]
+      next: :ell,
+      current: :ell,
+      rotation: 0,
+      x: 5,
+      y: 0
     }}
   end
 
-  def get_state(game) do
-    %{
-      board: game.board,
-      next: game.next
+  def handle_call(:get_state, _from, state) do
+    reply_state = %{
+      board: board_with_overlaid_shape(state),
+      next: Shapes.get(state.next, 0)
     }
+    {:reply, reply_state, state}
+  end
+
+  def handle_info(:tick, state) do
+    IO.inspect "game tick"
+    {:noreply, %State{state | y: state.y + 1}}
   end
   
+
+  def board_with_overlaid_shape(%State{} = state) do
+    for {row, row_i} <- Enum.with_index(state.board) do
+      for {col, col_i} <- Enum.with_index(row) do
+        rotated_shape_overlaps_cell = Enum.member?(State.cells_for_shape(state), {col_i, row_i})
+        cond do
+          rotated_shape_overlaps_cell -> Shapes.number(state.current)
+          true -> col
+        end
+      end
+    end
+  end
   
+
+    
 end
