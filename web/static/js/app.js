@@ -36,6 +36,12 @@ channel.on("tetris:state", chan => {
   App.draw(context, chan)
 })
 
+window.onkeyup = function(e) {
+  console.log("up")
+  e.preventDefault()
+  channel.push("event", {event: "move_right"})
+}
+
 let canvas = document.getElementById("canvas")
 let context = canvas.getContext("2d")
 

@@ -2,6 +2,7 @@ defmodule JoshTetris.Game do
   use GenServer
   alias JoshTetris.Shapes
   alias JoshTetris.Game.State
+  alias JoshTetris.Game.Interaction
 
   @game_tick 500
 
@@ -15,6 +16,11 @@ defmodule JoshTetris.Game do
   def get_state(pid) do
     GenServer.call(pid, :get_state)
   end
+
+  def handle_input(pid, input) do
+    GenServer.cast(pid, {:handle_input, input})
+  end
+  
   
   ## Server Callbacks
   def init(_args) do
@@ -55,6 +61,11 @@ defmodule JoshTetris.Game do
     }
     {:reply, reply_state, state}
   end
+
+  def handle_cast({:handle_input, input}, state) do
+    {:noreply, Interaction.handle_input(state, input)}
+  end
+  
 
   def handle_info(:tick, state) do
     IO.inspect "game tick"
