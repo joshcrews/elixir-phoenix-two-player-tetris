@@ -2,7 +2,7 @@ defmodule JoshTetris.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", JoshTetris.RoomChannel
+  channel "game:*", JoshTetris.GameChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
