@@ -20,6 +20,12 @@ import "deps/phoenix_html/web/static/js/phoenix_html"
 
 // import socket from "./socket"
 
+let canvas = document.getElementById("canvas")
+let context = canvas.getContext("2d")
+
+let nextFrameInitialX = 14
+let nextFrameInitialY = 0
+
 import {Socket} from "deps/phoenix/web/static/js/phoenix"
 
 let socket = new Socket("/socket")
@@ -63,12 +69,6 @@ window.onkeyup = function(e) {
   channel.push("event", {event: eventName})
 }
 
-let canvas = document.getElementById("canvas")
-let context = canvas.getContext("2d")
-
-let nextFrameInitialX = 12
-let nextFrameInitialY = 0
-
 let App = {
   draw: function(context,state) {
     this.drawBoard(context, state.board)
@@ -79,7 +79,17 @@ let App = {
     this.drawPixelArray(context, board, 1, 0)
   },
   drawNext: function(context, next) {
+    this.clearNext(context)
     this.drawNextPiece(context, next)
+  },
+  clearNext: function(context){
+    let emptyNext = [
+      [0,0,0,0],
+      [0,0,0,0],
+      [0,0,0,0],
+      [0,0,0,0]
+    ]
+    this.drawPixelArray(context, emptyNext, nextFrameInitialX, nextFrameInitialY)
   },
   drawPixelArray: function(context, pixelArray, initialX, initialY) {
     for(let i = 0; i < pixelArray.length; i++) {

@@ -73,20 +73,6 @@ defmodule JoshTetris.Game do
     {:noreply, tick_game(state)}
   end
 
-  def tick_game(state) do
-    cond do
-      collision_with_bottom?(state) ->
-        new_state = %State{state | board: board_with_overlaid_shape(state)}
-        %State{new_state |  current: state.next, x: 5, y: 0, next: Shapes.random}
-      :else ->
-        %State{state | y: state.y + 1}
-    end
-  end
-
-  def collision_with_bottom?(state) do
-    Shapes.height(state.current, state.rotation) + state.y > 19
-  end
-  
   def board_with_overlaid_shape(%State{} = state) do
     for {row, row_i} <- Enum.with_index(state.board) do
       for {col, col_i} <- Enum.with_index(row) do
@@ -98,7 +84,25 @@ defmodule JoshTetris.Game do
       end
     end
   end
-  
 
-    
+  def tick_game(state) do
+    cond do
+      collision_with_bottom?(state) || collision_with_board?(state) ->
+        new_state = %State{state | board: board_with_overlaid_shape(state)}
+        %State{new_state |  current: state.next, x: 5, y: 0, next: Shapes.random}
+      :else ->
+        %State{state | y: state.y + 1}
+    end
+  end
+
+  def collision_with_bottom?(state) do
+    Shapes.height(state.current, state.rotation) + state.y > 19
+  end
+
+  def collision_with_board?(state) do
+    next_coords = for {x, y} <- State.cells_for_shape(state), do: {x, y+1}
+    Enum.any?(next_coords, fn(coords) ->
+      State.cell_at(state, coords) != 0
+    end)
+  end
 end
