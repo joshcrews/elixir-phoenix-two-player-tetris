@@ -24,11 +24,11 @@ defmodule JoshTetris.Game do
   
   ## Server Callbacks
   def init(_args) do
-    {:ok, %JoshTetris.Game.State{
+    {:ok, %State{
       board: [
-        [0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,1,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0],
@@ -72,7 +72,6 @@ defmodule JoshTetris.Game do
     {:noreply, %State{state | y: state.y + 1}}
   end
   
-
   def board_with_overlaid_shape(%State{} = state) do
     for {row, row_i} <- Enum.with_index(state.board) do
       for {col, col_i} <- Enum.with_index(row) do

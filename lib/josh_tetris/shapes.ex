@@ -5,7 +5,6 @@ defmodule JoshTetris.Shapes do
     [1, 0],
     [1, 0],
     [1, 1]
-
   ]
 
   @jay [
@@ -45,29 +44,35 @@ defmodule JoshTetris.Shapes do
     zee: [@zee, rotate(@zee, 90), rotate(@zee, 180), rotate(@zee, 270)],
     bar: [@bar, rotate(@bar, 90), rotate(@bar, 180), rotate(@bar, 270)],
     oh:  [@oh, rotate(@oh, 90), rotate(@oh, 180), rotate(@oh, 270)],
-    tee: [@tee, rotate(@tee, 90), rotate(@tee, 180), rotate(@tee, 270)]
+    tee: [@tee, rotate(@tee, 90), rotate(@tee, 180), rotate(@tee, 270)],
   }
 
   def shapes, do: @shapes
 
   def get(shape, rotation) do
-    @shapes[shape] |> Enum.at(rotation)
+    @shapes[shape]
+    |> Enum.at(rotation)
   end
 
   def width(shape, rotation) do
-    get(shape, rotation) |> width
+    get(shape, rotation)
+    |> width
   end
 
   def height(shape, rotation) do
-    get(shape, rotation) |> height
+    get(shape, rotation)
+    |> height
   end
 
   def width(shape) do
-    shape |> hd |> length
+    shape
+    |> hd
+    |> length
   end
 
   def height(shape) do
-    shape |> length
+    shape
+    |> length
   end
 
   def random do

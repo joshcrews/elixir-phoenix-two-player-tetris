@@ -32,14 +32,35 @@ channel.join().receive("ok", chan => {
 })
 
 channel.on("tetris:state", chan => {
-  console.log(chan)
   App.draw(context, chan)
 })
 
+function gameEventFor(evt) {
+  let key = evt.keyIdentifier || evt.key
+  switch(key) {
+    case "Left":
+      return "move_left"
+    case "ArrowLeft":
+     return "move_left"
+    case "Right":
+      return "move_right"
+    case "ArrowRight":
+     return "move_right"
+    case "Up":
+      return "rotate_cw"
+    case "ArrowUp":
+      return "rotate_cw"
+    default:
+     console.log(key)
+     return "noop"
+  }
+}
+
 window.onkeyup = function(e) {
-  console.log("up")
   e.preventDefault()
-  channel.push("event", {event: "move_right"})
+  let eventName = gameEventFor(e)
+  console.log(eventName)
+  channel.push("event", {event: eventName})
 }
 
 let canvas = document.getElementById("canvas")
@@ -49,44 +70,13 @@ let nextFrameInitialX = 12
 let nextFrameInitialY = 0
 
 let App = {
-  runTetris: function() {
-    let state = {
-      board: [
-        [0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,0,0,0,0,0],
-        [0,0,0,0,1,1,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0]
-      ],
-      next: [
-        [1, 0],
-        [1, 0],
-        [1, 1]
-      ]
-    }
-    this.draw(context, state)
-  },
   draw: function(context,state) {
     this.drawBoard(context, state.board)
     this.drawNext(context, state.next)
   },
   drawBoard: function(context, board) {
     this.drawFrame(context, board)
-    this.drawPixelArray(context, board, 0, 0)
+    this.drawPixelArray(context, board, 1, 0)
   },
   drawNext: function(context, next) {
     this.drawNextPiece(context, next)
@@ -95,12 +85,15 @@ let App = {
     for(let i = 0; i < pixelArray.length; i++) {
       for(let j = 0; j < pixelArray[0].length; j++) {
         let col = pixelArray[i][j]
+        let brush;
         switch(col) {
           case 0:
+            brush = this.brushFor("background")
             break;
           default:
-            this.drawSquare(context, initialX + j, initialY + i, this.brushFor(this.shapeName(col)))
+            brush = this.brushFor(this.shapeName(col))
         }
+        this.drawSquare(context, initialX + j, initialY + i, brush)
       }
     }
   },
@@ -111,12 +104,12 @@ let App = {
     let brush = this.brushFor("board")
     let boardWidth = board[0].length
     let boardHeight = board.length
-    for(let x = 0; x <= boardWidth; x++) {
+    for(let x = 0; x <= boardWidth+1; x++) {
       this.drawSquare(context, x, boardHeight, brush)
     }
-    for(let y = 0; y <= boardHeight; y++) {
+    for(let y = 0; y < boardHeight; y++){
       this.drawSquare(context, 0, y, brush)
-      this.drawSquare(context, boardWidth, y, brush)
+      this.drawSquare(context, boardWidth+1, y, brush)
     }
   },
   drawSquare: function(context, x, y, brush) {
@@ -130,6 +123,8 @@ let App = {
     switch(type){
       case "board":
         return "rgb(0,0,0)"
+      case "background":
+        return "rgb(255, 255, 255)"
       case "ell":
         return "rgb(255, 150, 0)"
       case "jay":
@@ -166,6 +161,34 @@ let App = {
   }
 }
 
-App.runTetris()
+let state = {
+  board: [
+    [0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,0,0,0,0,0],
+    [0,0,0,0,1,1,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,0]
+  ],
+  next: [
+    [1, 0],
+    [1, 0],
+    [1, 1]
+  ]
+}
+//App.draw(context, state)
 
 export default App

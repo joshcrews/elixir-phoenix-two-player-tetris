@@ -15,11 +15,15 @@ defmodule JoshTetris.Rotator do
   end
 
   def rotate(piece, 180) do
-    piece |> rotate(90) |> rotate(90)
+    piece
+    |> rotate(90)
+    |> rotate(90)
   end
 
   def rotate(piece, 270) do
-    piece |> rotate(180) |> rotate(90)
+    piece
+    |> rotate(180)
+    |> rotate(90)
   end
 
   def rotate(piece, amount) when rem(amount, 90) == 0 do
