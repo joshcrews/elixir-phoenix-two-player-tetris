@@ -24,6 +24,7 @@ defmodule JoshTetris.Game do
   
   ## Server Callbacks
   def init(_args) do
+    :random.seed(:erlang.now)
     {:ok, %State{
       board: [
         [0,0,0,0,0,0,0,0,0,0],
@@ -47,8 +48,8 @@ defmodule JoshTetris.Game do
         [0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0]
       ],
-      next: :ell,
-      current: :ell,
+      next: Shapes.random,
+      current: Shapes.random,
       rotation: 0,
       x: 5,
       y: 0
@@ -58,7 +59,7 @@ defmodule JoshTetris.Game do
   def handle_call(:get_state, _from, state) do
     reply_state = %{
       board: board_with_overlaid_shape(state),
-      next: Shapes.get(state.next, 0)
+      next: Shapes.get(state.next, 0) |> colorize(state.next)
     }
     {:reply, reply_state, state}
   end
@@ -89,7 +90,8 @@ defmodule JoshTetris.Game do
     cond do
       collision_with_bottom?(state) || collision_with_board?(state) ->
         new_state = %State{state | board: board_with_overlaid_shape(state)}
-        %State{new_state |  current: state.next, x: 5, y: 0, next: Shapes.random}
+        cleared_state = State.clear_lines(new_state)
+        %State{cleared_state |  current: state.next, x: 5, y: 0, next: Shapes.random}
       :else ->
         %State{state | y: state.y + 1}
     end
@@ -104,5 +106,13 @@ defmodule JoshTetris.Game do
     Enum.any?(next_coords, fn(coords) ->
       State.cell_at(state, coords) != 0
     end)
+  end
+
+  def colorize(shape_list, name) do
+    for row <- shape_list do
+      for col <- row do
+        col * Shapes.number(name)
+      end
+    end
   end
 end

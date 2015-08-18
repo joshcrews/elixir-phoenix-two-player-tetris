@@ -62,11 +62,19 @@ function gameEventFor(evt) {
   }
 }
 
-window.onkeyup = function(e) {
-  e.preventDefault()
+
+window.onkeydown = function(e) {
+  
   let eventName = gameEventFor(e)
   console.log(eventName)
-  channel.push("event", {event: eventName})
+  if(eventName == "noop") {}
+  else { 
+    e.preventDefault()
+    channel.push("event", {event: eventName})
+  }
+
+  e.preventDefault()
+
 }
 
 let App = {
