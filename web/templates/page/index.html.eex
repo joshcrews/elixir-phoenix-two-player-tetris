@@ -1,1 +1,11 @@
-<canvas id='canvas' width="500" height="1000"></canvas>
+<div class='row'>
+  <div class='col-sm-6'>
+    <h3>You</h3>
+    <canvas id='your-canvas' width="500" height="1000"></canvas>
+  </div>
+  <div class='col-sm-6'>
+    <h3>Opponent</h3>
+    <canvas id='opponent-canvas' width="500" height="1000"></canvas>
+  </div>
+</div>
+

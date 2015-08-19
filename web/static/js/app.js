@@ -39,14 +39,20 @@ channel.join().receive("ok", chan => {
   console.log("Got into the channel.")
 })
 
-channel.on("tetris:state", chan => {
-  App.draw(context, chan)
+channel.on("tetris:your_state", gameState => {
+  App.draw(yourContext, gameState)
+})
+
+channel.on("tetris:opponent_state", gameState => {
+  App.draw(opponentContext, gameState)
 })
 
 
+let yourCanvas = document.getElementById("your-canvas")
+let yourContext = yourCanvas.getContext("2d")
 
-let canvas = document.getElementById("canvas")
-let context = canvas.getContext("2d")
+let opponentCanvas = document.getElementById("opponent-canvas")
+let opponentContext = opponentCanvas.getContext("2d")
 
 let nextFrameInitialX = 14
 let nextFrameInitialY = 0

@@ -70,7 +70,6 @@ defmodule JoshTetris.Game do
   
 
   def handle_info(:tick, state) do
-    IO.inspect "game tick"
     {:noreply, tick_game(state)}
   end
 
