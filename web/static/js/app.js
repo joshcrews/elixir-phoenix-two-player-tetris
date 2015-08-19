@@ -20,11 +20,13 @@ import "deps/phoenix_html/web/static/js/phoenix_html"
 
 // import socket from "./socket"
 
-let canvas = document.getElementById("canvas")
-let context = canvas.getContext("2d")
 
-let nextFrameInitialX = 14
-let nextFrameInitialY = 0
+
+
+
+//
+// create the websocket to the server
+//
 
 import {Socket} from "deps/phoenix/web/static/js/phoenix"
 
@@ -41,41 +43,13 @@ channel.on("tetris:state", chan => {
   App.draw(context, chan)
 })
 
-function gameEventFor(evt) {
-  let key = evt.keyIdentifier || evt.key
-  switch(key) {
-    case "Left":
-      return "move_left"
-    case "ArrowLeft":
-     return "move_left"
-    case "Right":
-      return "move_right"
-    case "ArrowRight":
-     return "move_right"
-    case "Up":
-      return "rotate_cw"
-    case "ArrowUp":
-      return "rotate_cw"
-    default:
-     console.log(key)
-     return "noop"
-  }
-}
 
 
-window.onkeydown = function(e) {
-  
-  let eventName = gameEventFor(e)
-  console.log(eventName)
-  if(eventName == "noop") {}
-  else { 
-    e.preventDefault()
-    channel.push("event", {event: eventName})
-  }
+let canvas = document.getElementById("canvas")
+let context = canvas.getContext("2d")
 
-  e.preventDefault()
-
-}
+let nextFrameInitialX = 14
+let nextFrameInitialY = 0
 
 let App = {
   draw: function(context,state) {
@@ -207,6 +181,38 @@ let state = {
     [1, 1]
   ]
 }
-//App.draw(context, state)
 
 export default App
+
+function gameEventFor(evt) {
+  let key = evt.keyIdentifier || evt.key
+  switch(key) {
+    case "Left":
+      return "move_left"
+    case "ArrowLeft":
+     return "move_left"
+    case "Right":
+      return "move_right"
+    case "ArrowRight":
+     return "move_right"
+    case "Up":
+      return "rotate_cw"
+    case "ArrowUp":
+      return "rotate_cw"
+    default:
+     console.log(key)
+     return "noop"
+  }
+}
+
+window.onkeydown = function(e) {
+  let eventName = gameEventFor(e)
+  console.log(eventName)
+  if(eventName == "noop") {}
+  else { 
+    e.preventDefault()
+    channel.push("event", {event: eventName})
+  }
+}
+
+
