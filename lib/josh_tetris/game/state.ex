@@ -7,8 +7,6 @@ defmodule JoshTetris.Game.State do
     end
   end
 
-
-
   alias JoshTetris.Shapes
 
   defstruct [:board, :next, :current, :rotation, :x, :y]
@@ -51,8 +49,5 @@ defmodule JoshTetris.Game.State do
     line
     |> Enum.all?(fn(x) -> x != 0 end)
   end
-  
-  
-  
   
 end

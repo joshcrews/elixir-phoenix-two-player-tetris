@@ -9,7 +9,6 @@ defmodule JoshTetris.Websocket do
   def loop(game, socket) do
     receive do
       :tick ->
-        IO.puts "tick"
         Phoenix.Channel.push socket, "tetris:state", JoshTetris.Game.get_state(game)
       _ -> :ok    
     end

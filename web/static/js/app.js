@@ -199,6 +199,10 @@ function gameEventFor(evt) {
       return "rotate_cw"
     case "ArrowUp":
       return "rotate_cw"
+    case "Down":
+      return "sink_piece"
+    case "ArrowDown":
+      return "sink_piece"
     default:
      console.log(key)
      return "noop"
