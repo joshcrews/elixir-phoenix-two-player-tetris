@@ -8,17 +8,22 @@ defmodule JoshTetris.GameChannel do
   end
 
   def handle_in("event", %{"event" => event_name}, socket) do
+    {your_game, _} = socket.assigns[:games]
     # Note: don't use String.to_atom like this folks
-    IO.puts "got #{event_name}"
-    JoshTetris.Game.handle_input(socket.assigns[:game], String.to_atom(event_name))
+    JoshTetris.Game.handle_input(your_game, String.to_atom(event_name))
     {:noreply, socket}
   end
   
 
   def handle_info(:after_join, socket) do
-    {:ok, game} = JoshTetris.Game.start
-    spawn(fn() -> JoshTetris.Websocket.run(game, socket) end)
-    socket = assign(socket, :game, game)
+    {:ok, your_game} = JoshTetris.Game.start
+    {:ok, opponent_game} = JoshTetris.Game.start
+
+    games = {your_game, opponent_game}
+
+    spawn(fn() -> JoshTetris.Websocket.run(games, socket) end)
+    socket = assign(socket, :games, games)
+
     {:noreply, socket}
   end
   

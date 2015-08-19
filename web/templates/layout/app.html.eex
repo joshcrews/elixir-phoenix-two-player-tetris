@@ -17,6 +17,11 @@
       <%= @inner %>
 
     </div> <!-- /container -->
+    <footer>
+      <div class='container'>
+        <p>Based on and expanded from Josh Adams' ElixirEU 2015 talk http://www.elixirconf.eu/elixirconf2015/josh-adams, Josh's code: https://github.com/knewter/elixirconfeu_tetris</p>
+      </div>
+    </footer>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>
