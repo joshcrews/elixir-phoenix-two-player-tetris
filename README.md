@@ -1,19 +1,15 @@
 # JoshTetris
 
-To start your Phoenix app:
+Two player simple Tetris built with Elixir Phoenix.
 
-  1. Install dependencies with `mix deps.get`
-  2. Create and migrate your database with `mix ecto.create && mix ecto.migrate`
-  3. Start Phoenix endpoint with `mix phoenix.server`
+I based this game off the code and slides from Josh Adams' ElixirEU 2015 conference talk http://www.elixirconf.eu/elixirconf2015/josh-adams.
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+From that starting point I added that the down key and two-player mode.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+### How to play
 
-## Learn more
+Get a buddy and two different computers.  Each of you go to https://tetris-jc.herokuapp.com/.  
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: http://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+Hopefully your game is on the left side, and your friend's game in on the right.  (And vice verse for your friend on their screen.)
+
+But there's a chance that you didn't get matched with each other to play head to head, and if that's the case have your friend refresh and then you refresh.
