@@ -16,10 +16,9 @@ defmodule JoshTetris.GameChannel do
   
 
   def handle_info(:after_join, socket) do
-    {:ok, your_game} = JoshTetris.Game.start
-    {:ok, opponent_game} = JoshTetris.Game.start
+    {my_game, opponent_game} = JoshTetris.AvailablePlayerRegistry.get_me_a_partner
 
-    games = {your_game, opponent_game}
+    games = {my_game, opponent_game}
 
     spawn(fn() -> JoshTetris.Websocket.run(games, socket) end)
     socket = assign(socket, :games, games)

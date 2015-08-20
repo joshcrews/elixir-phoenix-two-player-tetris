@@ -11,6 +11,7 @@ defmodule JoshTetris do
       supervisor(JoshTetris.Endpoint, []),
       # Start the Ecto repository
       worker(JoshTetris.Repo, []),
+      worker(JoshTetris.AvailablePlayerRegistry, [])
       # Here you could define other workers and supervisors as children
       # worker(JoshTetris.Worker, [arg1, arg2, arg3]),
     ]

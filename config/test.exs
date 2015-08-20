@@ -12,7 +12,6 @@ config :logger, level: :warn
 # Configure your database
 config :josh_tetris, JoshTetris.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "jorgecruz",
   database: "josh_tetris_test",
   pool: Ecto.Adapters.SQL.Sandbox
